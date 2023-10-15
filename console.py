@@ -21,12 +21,9 @@ class HBNBCommand(cmd.Cmd):
     classes = ['BaseModel']
 
     def __init__(self):
-        """ init of the class"""
-        self.__class__.instances.append(self)
-
-        @classmethod
-        def all(cls):
-            return cls.instances
+        """command completin"""
+        super().__init__()
+        self.completekey = 'tab'
 
     def do_quit(self, arg):
         """Exit the program"""
