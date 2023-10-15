@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """entry point of the command interpreter"""
+
 import cmd
 import os
 import json
@@ -11,6 +12,7 @@ from models.city import City
 from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
+
 
 class HBNBCommand(cmd.Cmd):
     """defines command interpreter"""
@@ -87,7 +89,7 @@ class HBNBCommand(cmd.Cmd):
         print(user)
 
     def do_all(self, arg):
-        """Prints all string representation of all instances based on the class name"""
+        """Prints all string representation of all the class name"""
         if not arg:
             print("** class name missing **")
             return
