@@ -49,22 +49,15 @@ class HBNBCommand(cmd.Cmd):
         print("Exit the program")
 
     def do_create(self, arg):
-        """Create a new instance of a class"""
-        args = arg.split()
-        if not arg:
+        """ Create a new class instance and print its id"""
+        argl = parse(arg)
+        if len(argl) == 0:
             print("** class name missing **")
-            return
-
-        class_name = args[0]
-        classes = ["BaseModel", "city", "place", "state", "user"]
-
-        if class_name not in classes:
+        elif argl[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
-            return
-
-        new_instance = eval(class_name)()
-        new_instance.save()
-        print(new_instance.id)
+        else:
+            print(eval(argl[0])().id)
+            storage.save()
 
     def do_destroy(self, arg):
         """Deletes a User instance based on the class name and id"""
