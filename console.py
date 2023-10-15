@@ -17,7 +17,13 @@ from models.review import Review
 class HBNBCommand(cmd.Cmd):
     """defines command interpreter"""
     prompt = '(hbnb) '
+    instances = []
     classes = ['BaseModel']
+
+    def __init__(self):
+        """command completin"""
+        super().__init__()
+        self.completekey = 'tab'
 
     def do_quit(self, arg):
         """Exit the program"""
@@ -40,68 +46,68 @@ class HBNBCommand(cmd.Cmd):
         print("Exit the program")
 
     def do_create(self, arg):
-        """Creates a new instance of User, saves it, and prints the id"""
-        if not args:
+        """ Create a new class instance and print its id"""
+        argl = parse(arg)
+        if len(argl) == 0:
             print("** class name missing **")
-            return
-        if args != "User":
+        elif argl[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
-            return
-        user = User()
-        user.save()
-        print(user.id)
+        else:
+            print(eval(argl[0])().id)
+            storage.save()
 
     def do_destroy(self, arg):
         """Deletes a User instance based on the class name and id"""
+        classes = ["BaseModel", "user", "place", "city", "state"]
+        args = arg.split()
         if not args:
             print("** class name missing **")
             return
-        if args.split()[0] != "User":
+        class_name = args[0]
+        if class_name not in classes:
             print("** class doesn't exist **")
             return
-        obj_id = args.split()[1]
-        if not obj_id:
+        if len(args) < 2:
             print("** instance id missing **")
             return
-        user = self.get_object_by_id(User, obj_id)
-        if not user:
+        obj_id = args[1]
+        key = class_name + "." + obj_id
+        if key not in storage.all():
             print("** no instance found **")
             return
-        user.delete()
-        self.save()
+        del storage.all()[key]
+        storage.save()
 
     def do_show(self, arg):
         """Prints the string representation of a User instance"""
+        args = arg.split()
         if not args:
             print("** class name missing **")
             return
-        if args.split()[0] != "User":
+        class_name = args[0]
+        if class_name != "User":
             print("** class doesn't exist **")
             return
-        obj_id = args.split()[1]
-        if not obj_id:
+        if len(args) < 2:
             print("** instance id missing **")
             return
-        user = self.get_object_by_id(User, obj_id)
-        if not user:
+        obj_id = args[1]
+        key = class_name + "." + obj_id
+        if key not in storage.all():
             print("** no instance found **")
             return
-        print(user)
+        print(storage.all()[key])
 
     def do_all(self, arg):
-        """Prints all string representation of all the class name"""
-        if not arg:
-            print("** class name missing **")
-            return
-
-        try:
-            cls = eval(arg)
-        except NameError:
-            print("** class doesn't exist **")
-            return
-
-        instances = storage.all(cls)
-        print([str(instance) for instance in instances.values()])
+        """Print all instances"""
+        classes = ["BaseModel", "User", "Place", "Review", "City"]
+        if arg == "":
+            objects = self.__objects.values()
+        else:
+            class_name = arg.split()[0]
+            if class_name not in classes:
+                print("** class doesn't exist **")
+                return
 
     def do_update(self, arg):
         """Update an instance"""
@@ -134,10 +140,30 @@ class HBNBCommand(cmd.Cmd):
             return
 
         try:
-            instances = eval(args[0]).all()
+            class_name = args[0]
+            if class_name not in self.classes:
+                print("** class doesn't exist **")
+                return
+
+            instances = self.classes[class_name]
             print(len(instances))
         except NameError:
-            print("** class doesn't exist **")
+            i
+        print("** class doesn't exist **")
+
+    def do_help(self, arg):
+        if arg == "":
+            print("Documented commands (type help <topic>):")
+            print("========================================")
+            print("help           - List available commands")
+            print("quit           - Exit the program")
+        else:
+            if arg == "help":
+                print("check help manual")
+            elif arg == "quit":
+                print("type quit")
+            else:
+                print("No help available for '{}'".format(arg))
 
 
 if __name__ == '__main__':
