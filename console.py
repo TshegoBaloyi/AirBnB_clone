@@ -5,6 +5,7 @@ import cmd
 import os
 import json
 import sys
+import re
 from models.user import User
 from models.base_model import BaseModel
 from models.state import State
@@ -12,13 +13,40 @@ from models.city import City
 from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
+from shlex import split
 
+
+def parse(arg):
+        """define parse"""
+        curly_braces = re.search(r"\{(.*?)\}", arg)
+        brackets = re.search(r"\[(.*?)\]", arg)
+        if curly_braces is None:
+            if brackets is None:
+                return [i.strip(",") for i in split(arg)]
+            else:
+                lexer = split(arg[:brackets.span()[0]])
+                retl = [i.strip(",") for i in lexer]
+                retl.append(brackets.group())
+                return retl
+        else:
+            lexer = split(arg[:curly_braces.span()[0]])
+            retl = [i.strip(",") for i in lexer]
+            retl.append(curly_braces.group())
+            return retl
 
 class HBNBCommand(cmd.Cmd):
     """defines command interpreter"""
     prompt = '(hbnb) '
     instances = []
-    classes = ['BaseModel']
+    classes = {
+        "BaseModel",
+        "Review",
+        "Amenity",
+        "City",
+        "Place",
+        "State",
+        "User"
+        }
 
     def __init__(self):
         """command completin"""
@@ -50,7 +78,7 @@ class HBNBCommand(cmd.Cmd):
         argl = parse(arg)
         if len(argl) == 0:
             print("** class name missing **")
-        elif argl[0] not in HBNBCommand.__classes:
+        elif argl[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         else:
             print(eval(argl[0])().id)
