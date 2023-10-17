@@ -2,9 +2,6 @@
 """entry point of the command interpreter"""
 
 import cmd
-import os
-import json
-import sys
 import re
 from models.user import User
 from models.base_model import BaseModel
