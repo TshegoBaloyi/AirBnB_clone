@@ -6,7 +6,6 @@ import os
 import json
 import sys
 import re
-from models import storage
 from models.user import User
 from models.base_model import BaseModel
 from models.state import State
