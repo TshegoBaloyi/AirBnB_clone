@@ -27,7 +27,6 @@ What you should learn from this project:
 * How to compute CSS Specificity Value
 
 * What are Box properties in CSS
-
 ---
 
 # [0. Inline styling](./0-index.html)
