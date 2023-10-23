@@ -121,7 +121,11 @@ article:focus {
     cursor: pointer;
   }
 
+<<<<<<< HEAD
 }
+=======
+{
+>>>>>>> 6b25a62e12bfdab1f26c8a67548d3fb818b022b3
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
 
